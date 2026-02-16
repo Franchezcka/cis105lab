@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>Tic-Tac-Toe</title>
+<style>
+{
+	box-sizing : border box;
+	margin: 0;
+	padding: 0;
+}
+body{
+	background: #09637E;
+	min-height: 100vh;
+	display: flex;
+	align items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 16px;
+}
+
+.board{
+	display: grid;
+	grid-template-columns: repeat(3,100px);
+	grid-template-rows: repeat(3, 100px);
+	gap: 5px;
+	justify-content: center;
+	margin: 20px auto;
+}
+.game-container{
+	text-align: center;
+}
+
+.cell{
+	background: #f2eee6;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2.5rem;
+	font-weight: bold;
+	cursor: pointer;
+	border-radius: 15px;
+	transition: 0.2s;
+	box-shadow: 0 0 10px rgba(0, 255,255,0.3);
+}
+.cell:hover{
+	background: black;
+	transform: scale(1.05);
+}
+.status{
+	margin:10px 0 ;
+	font-size: 1.2 rem;
+}
+
+button{
+	padding: 10px 20px;
+	font-size: 1 rem;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	background:linear-gradient(135 deg, #141e30, #243b55);
+	transition: 0.3s;
+}
+.button:hover{
+	background: white;
+	color: green;
+	}
+</style>
+</head>
+
+</body>
+<div class= "game-container">
+	<h1>Tic-Tac-Toe</h1>
+	<div class = "status" id="status">Current Player: x</div>
+
+	<div class="board" id="board">
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+	<div class="cell"></div>
+</div>
+<button onclick="reset">Reset Game</button>
+</div>
+</body>
+
+
+
+
+
+
+	
+
+
+
+
+
