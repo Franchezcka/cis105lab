@@ -1,0 +1,11 @@
+Main instructions:
+add javascript such that: 
+1. do basic arithmetic (+,-,/,*) with assumption that after entering second operand, will always click equals (basically flow is always operand operator operand equals, will never go operator again) 
+2. can either clear per digit or clear all 
+3. will display CIS105 if 
+    3.1 both operands are greater than 1000 and operator is + or - 
+    3.2 one operand has greater than 2 digits and the other has greater than 1 digit and operator is * 
+    3.3 is div/0 or result is >1000 and operator is division.
+
+Additional Instruction:
+1.Incorporate continous operations (instead of always equals after second operand, make it work with operator again) also when equals is pressed make it also be able to continue again.
