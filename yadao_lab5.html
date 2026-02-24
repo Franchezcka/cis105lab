@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Calculator</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+    }
+
+    .calculator {
+        background-color: #222;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        width: 260px;
+    }
+
+    .display {
+        background-color: #444;
+        color: #fff;
+        font-size: 2em;
+        text-align: right;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        height: 50px;
+        overflow: hidden;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+    }
+
+    .buttons button {
+        padding: 15px;
+        font-size: 1.2em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #eee;
+        transition: background-color 0.2s;
+    }
+
+    .buttons button:hover {
+        background-color: #ddd;
+    }
+
+    .buttons .operator {
+        background-color: #ff9500;
+        color: #fff;
+    }
+
+    .buttons .operator:hover {
+        background-color: #e08900;
+    }
+
+    .buttons .equals {
+        grid-column: span 2;
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .buttons .equals:hover {
+        background-color: #218838;
+    }
+
+    .buttons .clear {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .buttons .clear:hover {
+        background-color: #c82333;
+    }
+</style>
+
+</head>
+<body>
+<div class="calculator">
+    <div class="display">0</div>
+    <div class="buttons">
+        <div></div>
+        <button class="clear-all">CE</button>
+        <button class="clear">C</button>
+        <button class="operator">/</button>
+
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="operator">*</button>
+
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button class="operator">+</button>
+
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button class="operator">-</button>
+        <button>0</button>
+        <button>.</button>
+        
+        <button class="equals">=</button>
+    </div>
+</div>
+
+<script>
+const display = document.querySelector('.display');
+const buttons = document.querySelectorAll('.buttons button');
+
+let first = '';
+let second = '';
+let op = '';
+let enteringSecond = false;
+
+function show(val) {
+    display.textContent = val || '0';
+}
+
+function resetAll() {
+    first = '';
+    second = '';
+    op = '';
+    enteringSecond = false;
+}
+
+function clearDigit() {
+    if (enteringSecond) {
+        second = second.slice(0, -1);
+        show(second);
+    } else {
+        first = first.slice(0, -1);
+        show(first);
+    }
+}
+
+function digitCount(n) {
+    return String(n).replace('-', '').replace('.', '').length;
+}
+
+function checkCIS(a, b, operator, result) {
+
+    // RULE 3.1
+    if ((operator === '+' || operator === '-') && a > 1000 && b > 1000) {
+        return true;
+    }
+
+    // RULE 3.2
+    if (operator === '*') {
+        let aDigits = digitCount(a);
+        let bDigits = digitCount(b);
+
+        if ((aDigits > 2 && bDigits > 1) || (bDigits > 2 && aDigits > 1)) {
+            return true;
+        }
+    }
+
+    // RULE 3.3
+    if (operator === '/' && (b === 0 || result > 1000)) {
+        return true;
+    }
+
+    return false;
+}
+
+function calculate() {
+
+    if (first === '' || second === '' || op === '') return;
+
+    let a = Number(first);
+    let b = Number(second);
+    let result = 0;
+
+    if (op === '+') result = a + b;
+    if (op === '-') result = a - b;
+    if (op === '*') result = a * b;
+    if (op === '/') result = b === 0 ? Infinity : a / b;
+
+        if ((op === '+' || op === '*') && result > 1000) {
+        show('CIS105');
+        resetAll();
+        return;
+    }
+    
+    // CHECKS CIS BEFORE ANY RESET 
+    if (checkCIS(a, b, op, result)) {
+        show('CIS105');
+        resetAll();
+        return;
+    }
+
+    first = String(result);
+    second = '';
+    op = '';
+    enteringSecond = false;
+
+    show(first);
+}
+
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+
+        const val = btn.textContent;
+
+                if (!isNaN(val) || val === '.') {
+            if (enteringSecond) {
+                second += val;
+                show(second);
+            } else {
+                first += val;
+                show(first);
+            }
+        }
+
+                else if (btn.classList.contains('operator')) {
+
+            if (first === '') return;
+
+            // ONLY calculate if second already exists
+            if (second !== '') calculate();
+
+            op = val;
+            enteringSecond = true;
+        }
+
+        // equals
+        else if (btn.classList.contains('equals')) {
+            calculate();
+        }
+
+        // clears all
+        else if (btn.classList.contains('clear')) {
+            resetAll();
+            show('0');
+        }
+
+        // clears digit
+        else if (btn.classList.contains('clear-all')) {
+            clearDigit();
+        }
+
+    });
+});
+</script>
+</body>
+</html>
