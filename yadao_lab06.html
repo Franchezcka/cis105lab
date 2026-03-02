@@ -1,0 +1,64 @@
+<html>
+<head>
+<style>
+<h2 style = "margin-top: 40px;"> INVENTORY LIST</h2>
+</style>
+</head>
+<style>
+    body {
+        justify-content: center;
+        align-items: center;
+        background-color: #f4f4f4;
+        font-family: Arial, sans-serif;
+    }
+.display {
+        background-color: #444;
+        color: #fff;
+        font-size: 2em;
+        text-align: right;
+        padding: 10px;
+        overflow: hidden;
+    }
+</style>
+<body>
+<label>Product:</label>
+<input type ="text" id = "name" name ="product" required>
+<label>Price:</label>
+<input type ="text" id = "price" name ="price" required>
+<label>Stock:</label>
+<input type ="text" id = "stock" name ="stock" required>
+<button onclick = "addItem()">Add Item</button>
+<br>
+<table id= "table"></table>
+
+</body>
+<script>
+function addItem(){
+var table = document.getElementById("table");
+var Product = document.getElementById("name");
+var Price = document.getElementById("price");
+var Stock = document.getElementById("stock");
+if (Product.value != "" && Price.value !="" && Stock.value != ""){
+if (Stock.value =="0"){
+table.innerHTML += `<pre>${Product.value} ${Price.value} <font color = "red"> out of stock</font></pre>`;
+}else{ 
+table.innerHTML += `<pre>${Product.value} ${Price.value} ${Stock.value}</pre>`;
+}
+}
+}
+function prefillitem(Product, Price, Stock){
+var table = document.getElementById("table");
+if (Stock == "0"){
+table.innerHTML += `<pre>${Product} ${Price} <font color = "red"> out of stock</font></pre>`;
+}else{ 
+table.innerHTML += `<pre>${Product} ${Price} ${Stock}</pre>`;
+}
+}
+
+prefillitem("Gojo Figurine", "46", "9")
+prefillitem("Keyboard", "2345", "9")
+prefillitem("Naruto", "3400", "19")
+prefillitem("Headphones", "4500", "16")
+prefillitem("Higuruma Cosplay", "20000", "8")
+</script>
+</html>
