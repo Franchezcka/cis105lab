@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body { 
+        font-family: Arial, sans-serif; 
+        max-width: 600px; 
+        margin: 30px auto; 
+        padding: 20px;
+        background: #f4f4f4;
+    }
+    h2 { 
+        margin-top: 40px; 
+        color: #333; 
+    }
+    input { 
+        margin: 5px; 
+        padding: 8px; 
+        border: 1px solid #ccc; 
+        border-radius: 4px; 
+    }
+    button { 
+        margin: 5px; 
+        padding: 8px 15px; 
+        background: #333; 
+        color: white; 
+        border: none; 
+        border-radius: 4px;
+        cursor: pointer; 
+    }
+    button:hover { 
+        background: #555; 
+    }
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 20px; 
+        background: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    th { 
+        background: #333; 
+        color: white; 
+        padding: 12px; 
+        text-align: left;
+    }
+    td { 
+        padding: 12px; 
+        border-bottom: 1px solid #ddd; 
+    }
+    .out-of-stock { 
+        color: red; 
+        font-weight: bold; 
+    }
+    .in-stock { 
+        color: green; 
+    }
+</style>
+</head>
+<body>
+
+<h2>INVENTORY LIST</h2>
+
+<div>
+    <label>Product:</label>
+    <input type="text" id="name" placeholder="Product name" required>
+    <label>Price:</label>
+    <input type="text" id="price" placeholder="Price" required>
+    <label>Stock:</label>
+    <input type="text" id="stock" placeholder="Quantity" required>
+    <button onclick="addItem()">Add Item</button>
+</div>
+
+<table id="table">
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Action</th>
+    </tr>
+</table>
+
+<script>
+var store = {
+    items: [],
+    
+    addItem: function(name, price, stock) {
+        store.items.push({ name: name, price: price, stock: parseInt(stock) });
+    },
+    
+    buyProduct: function(productName, qty) {
+        
+        var item = null;
+        for (var i = 0; i < store.items.length; i++) {
+            if (store.items[i].name === productName) {
+                item = store.items[i];
+                break;
+            }
+        }
+        
+        if (!item) {
+            alert("Product does not exist!");
+            return false;
+        }
+        
+       
+        if (qty > item.stock) {
+            alert("Not enough stock!");
+            return false;
+        }
+        
+        
+        item.stock -= qty;
+        return true;
+    }
+};
+
+function prefillitem(Product, Price, Stock) {
+    store.addItem(Product, Price, Stock);
+}
+
+
+prefillitem("Gojo Figurine", "2500", "17");
+prefillitem("Aizen Figurine", "2500", "38");
+prefillitem("Naruto Manga", "1200", "7");
+prefillitem("Samsung S26", "88990", "19");
+prefillitem("Higuruma Cosplay", "5000", "28");
+
+function showTable() {
+    var table = document.getElementById("table");
+    var html = "<tr><th>Product</th><th>Price</th><th>Stock</th><th>Action</th></tr>";
+    
+    for (var j = 0; j < store.items.length; j++) {
+        var item = store.items[j];
+        if (item.stock == 0) {
+            html += "<tr>" +
+                "<td>" + item.name + "</td>" +
+                "<td>₱" + item.price + "</td>" +
+                "<td class='out-of-stock'>out of stock</td>" +
+                "<td><button onclick='buyItem(\"" + item.name + "\")'>Buy</button></td>" +
+            "</tr>";
+        } else {
+            html += "<tr>" +
+                "<td>" + item.name + "</td>" +
+                "<td>₱" + item.price + "</td>" +
+                "<td class='in-stock'>" + item.stock + "</td>" +
+                "<td><button onclick='buyItem(\"" + item.name + "\")'>Buy</button></td>" +
+            "</tr>";
+        }
+    }
+    
+    table.innerHTML = html;
+}
+
+function addItem() {
+    var name = document.getElementById("name").value;
+    var price = document.getElementById("price").value;
+    var stock = document.getElementById("stock").value;
+    
+    if (name && price && stock) {
+        store.addItem(name, price, stock);
+        showTable();
+        
+        // Clear inputs
+        document.getElementById("name").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("stock").value = "";
+    } else {
+        alert("Please fill all fields!");
+    }
+}
+
+function buyItem(name) {
+    var qty = prompt("Enter quantity to buy:", "1");
+    if (qty) {
+        qty = parseInt(qty);
+        if (store.buyProduct(name, qty)) {
+            showTable();
+        }
+    }
+}
+
+
+showTable();
+</script>
+
+</body>
+</html>
